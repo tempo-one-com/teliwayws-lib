@@ -4,7 +4,7 @@ use crate::{error::Result, soap_ws::WebServiceTeliwaySoap};
 
 use super::TiersWsResponse;
 
-
+#[derive(Debug, Clone)]
 pub struct TiersUpdateSiretWsRequest {
    pub tiers_id: i32,
    pub tiers_type: String,
@@ -12,7 +12,7 @@ pub struct TiersUpdateSiretWsRequest {
 }
 
 pub async fn send(
-    ws: &WebServiceTeliwaySoap,    
+    ws: WebServiceTeliwaySoap,    
     tiers: TiersUpdateSiretWsRequest,
 ) -> Result<TiersWsResponse> {      
    let body = tiers.build_body();

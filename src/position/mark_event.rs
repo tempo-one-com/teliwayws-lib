@@ -5,6 +5,7 @@ use crate::{error::Result, soap_ws::WebServiceTeliwaySoap, format_to_teliway_ws_
 
 use super::PositionEventMarkerWsResponse;
 
+#[derive(Debug, Clone)]
 pub struct PositionEventMarkerWsRequest {
     pub position_ids: Vec<i32>,
     pub event_code: String,
@@ -14,7 +15,7 @@ pub struct PositionEventMarkerWsRequest {
 }
 
 pub async fn send(
-    ws: &WebServiceTeliwaySoap,    
+    ws: WebServiceTeliwaySoap,    
     req: PositionEventMarkerWsRequest,
 ) -> Result<PositionEventMarkerWsResponse> {
     let body = req.build_body();
