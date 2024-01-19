@@ -14,8 +14,8 @@ pub struct PositionEventMarkerWsRequest {
 }
 
 pub async fn send(
+    ws: &WebServiceTeliwaySoap,    
     req: PositionEventMarkerWsRequest,
-    ws: &WebServiceTeliwaySoap,
 ) -> Result<PositionEventMarkerWsResponse> {
     let body = req.build_body();
 

@@ -12,8 +12,8 @@ pub struct TiersUpdateSiretWsRequest {
 }
 
 pub async fn send(
-   tiers: TiersUpdateSiretWsRequest,
-   ws: &WebServiceTeliwaySoap,
+    ws: &WebServiceTeliwaySoap,    
+    tiers: TiersUpdateSiretWsRequest,
 ) -> Result<TiersWsResponse> {      
    let body = tiers.build_body();
 
