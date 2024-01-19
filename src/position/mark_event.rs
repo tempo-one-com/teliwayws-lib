@@ -15,10 +15,9 @@ pub struct PositionEventMarkerWsRequest {
 
 pub async fn send(
     req: PositionEventMarkerWsRequest,
-    app_code: &str,
     ws: &WebServiceTeliwaySoap,
 ) -> Result<PositionEventMarkerWsResponse> {
-    let body = req.build_body(app_code);
+    let body = req.build_body();
 
     let position_events = ws.send(body.into()).await?;
 
@@ -28,7 +27,7 @@ pub async fn send(
 }
 
 impl PositionEventMarkerWsRequest {
-    fn build_body(&self, app_code: &str) -> Markup {
+    fn build_body(&self) -> Markup {
         let date = format_to_teliway_ws_datetimez(self.date);
         
         html!(
@@ -39,7 +38,7 @@ impl PositionEventMarkerWsRequest {
                         item {(id)}
                     }}
                     sCodeEvenement { (self.event_code) }
-                    sCreateur {(app_code)}
+                    sCreateur {(self.created_by)}
                     iOrigine {"1"}
                     dtmDateHeureEvenement { (date) }
                     sCodeTiersEmetteur { (self.agence_code) }
@@ -69,7 +68,7 @@ mod tests {
             agence_code: "13M".to_string(),
         };
 
-        let envelope = ws.build_envelope(req.build_body("appTest").into());
+        let envelope = ws.build_envelope(req.build_body().into());
 
         assert!(envelope.contains("<sLogin>testusr</sLogin>"));        
         assert!(envelope.contains("<dtmDateHeureEvenement>1970-01-01T01:00:00.0+0100</dtmDateHeureEvenement>"));
