@@ -54,7 +54,10 @@ pub struct PositionEvent {
 ```
   
 # Versions
-## 1.0.0 19/01/24
+## 0.1.2 22/01/24
+Downgrade version regex (1.10.2 -> 1.0.0) pour éviter conflit avec axum 0.7.2
+
+## 0.1.1 19/01/24
 Implémentation des appels suivants:
 - GestionTiers : update du siret (edi) du tiers
 - GestionPosition : marque des positions avec un évènement 
