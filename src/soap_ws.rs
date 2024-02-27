@@ -12,8 +12,16 @@ pub struct WebServiceTeliwaySoap {
 }
 
 impl WebServiceTeliwaySoap {
+    pub fn new(url: &str, username: &str, password: &str) -> Self {
+        Self {
+            url: url.to_owned(),
+            username: username.to_owned(),
+            password: password.to_owned(),
+        }
+    }
+
     pub fn from_ws_url(url: &str) -> Result<Self> {
-        WebServiceTeliwaySoap::parse_ws_url(url)
+        Self::parse_ws_url(url)
     }
 
     pub fn parse_ws_url(ws_url: &str) -> Result<Self> {

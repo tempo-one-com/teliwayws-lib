@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
   
 # Versions
+## 0.1.3 27/02/24
+NEW: new sur WebServiceTeliwaySoap
+
 ## 0.1.2 22/01/24
 Downgrade version regex (1.10.2 -> 1.0.0) pour éviter conflit avec axum 0.7.2
 
