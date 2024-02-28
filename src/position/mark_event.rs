@@ -1,7 +1,7 @@
 use chrono::{DateTime, Local};
 use maud::{html, Markup};
 
-use crate::{error::Result, soap_ws::WebServiceTeliwaySoap, format_to_teliway_ws_datetimez};
+use crate::{auth::WsAuth, error::Result, format_to_teliway_ws_datetimez, soap_ws::WebServiceTeliwaySoap};
 
 use super::PositionEventMarkerWsResponse;
 
@@ -14,17 +14,34 @@ pub struct PositionEventMarkerWsRequest {
     pub agence_code: String,
 }
 
-pub async fn send(
-    ws: WebServiceTeliwaySoap,    
-    req: PositionEventMarkerWsRequest,
-) -> Result<PositionEventMarkerWsResponse> {
-    let body = req.build_body();
+pub struct PositionEventMarkerWs {
+    wsauth: WsAuth,
+}
 
-    let position_events = ws.send(body.into()).await?;
+impl PositionEventMarkerWs {
+    pub fn new(url: &str, username: &str, password: &str) -> Self {
+        Self {
+            wsauth: WsAuth::new(url, username, password),
+        }
+    }
 
-    let position_events: PositionEventMarkerWsResponse = position_events.try_into()?;
+    pub async fn send(
+        &self,
+        req: PositionEventMarkerWsRequest,
+    ) -> Result<PositionEventMarkerWsResponse> {
+        let body = req.build_body();    
+        
+        self
+            .send_request(body.into())
+            .await?
+            .try_into()
+    }    
+}
 
-    Ok(position_events)
+impl WebServiceTeliwaySoap for PositionEventMarkerWs {
+    fn get_auth(&self) -> WsAuth {
+        self.wsauth.clone()
+    }
 }
 
 impl PositionEventMarkerWsRequest {
@@ -55,11 +72,11 @@ mod tests {
 
     #[test]
     fn build_envelope() {
-        let ws = WebServiceTeliwaySoap {
-            url: "http://gtra.teliway.com/GestionTiers/gestionTiers.php".to_string(),
-            username: "testusr".to_string(),
-            password: "testpwd".to_string(),
-        };    
+        let ws = PositionEventMarkerWs::new(
+            "http://gtra.teliway.com/GestionTiers/gestionTiers.php", 
+            "testusr",
+            "testpwd",
+        );
             
         let req = PositionEventMarkerWsRequest {
             position_ids: vec![10,100, 1000],

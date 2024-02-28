@@ -1,6 +1,6 @@
 use maud::{Markup, html};
 
-use crate::{error::Result, soap_ws::WebServiceTeliwaySoap};
+use crate::{auth::WsAuth, error::Result, soap_ws::WebServiceTeliwaySoap};
 
 use super::TiersWsResponse;
 
@@ -11,17 +11,34 @@ pub struct TiersUpdateSiretWsRequest {
    pub siret: Option<String>,
 }
 
-pub async fn send(
-    ws: WebServiceTeliwaySoap,    
-    tiers: TiersUpdateSiretWsRequest,
-) -> Result<TiersWsResponse> {      
-   let body = tiers.build_body();
+pub struct TiersUpdateSiretWs {
+    wsauth: WsAuth,
+}
 
-   let tiers = ws.send(body.into()).await?;
+impl TiersUpdateSiretWs {
+    pub fn new(url: &str, username: &str, password: &str) -> Self {
+        Self {
+            wsauth: WsAuth::new(url, username, password),
+        }
+    }
 
-   let tiers: TiersWsResponse = tiers.try_into()?;
-   
-   Ok(tiers)
+    pub async fn send(
+        &self,   
+        tiers: TiersUpdateSiretWsRequest,
+    ) -> Result<TiersWsResponse> {      
+       let body = tiers.build_body();    
+       let tiers = self.send_request(body.into()).await?;
+    
+       let tiers: TiersWsResponse = tiers.try_into()?;
+       
+       Ok(tiers)
+    }    
+}
+
+impl WebServiceTeliwaySoap for TiersUpdateSiretWs {
+    fn get_auth(&self) -> WsAuth {
+        self.wsauth.clone()
+    }
 }
 
 impl TiersUpdateSiretWsRequest {
@@ -47,11 +64,11 @@ mod tests {
 
     #[test]
     fn build_envelope() {
-        let ws = WebServiceTeliwaySoap {
-            url: "http://gtra.teliway.com/GestionTiers/gestionTiers.php".to_string(),
-            username: "testusr".to_string(),
-            password: "testpwd".to_string(),
-        };
+        let ws = TiersUpdateSiretWs::new(
+            "http://gtra.teliway.com/GestionTiers/gestionTiers.php",
+            "testusr",
+            "testpwd",
+        );
 
         let req = TiersUpdateSiretWsRequest {
             tiers_id: 42,

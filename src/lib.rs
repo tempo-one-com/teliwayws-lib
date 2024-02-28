@@ -1,5 +1,6 @@
 use chrono::{DateTime, Local};
 
+pub mod auth;
 pub mod error;
 pub mod position;
 pub mod soap_ws;

@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
   
 # Versions
+## 0.1.4 28/02/24
+NEW: Refactorisation pour simplifier code des programmes appelant cette librairie. Tous les web service (PositionEventMarkerWs, TiersUpdateSiretWs) doivent maintenant hériter de WebServiceTeliwaySoap
+
 ## 0.1.3 27/02/24
 NEW: new sur WebServiceTeliwaySoap
 
