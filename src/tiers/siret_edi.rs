@@ -11,6 +11,7 @@ pub struct TiersUpdateSiretWsRequest {
    pub siret: Option<String>,
 }
 
+#[derive(Debug, Clone)]
 pub struct TiersUpdateSiretWs {
     wsauth: WsAuth,
 }

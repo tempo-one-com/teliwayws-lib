@@ -14,6 +14,7 @@ pub struct PositionEventMarkerWsRequest {
     pub agence_code: String,
 }
 
+#[derive(Debug, Clone)]
 pub struct PositionEventMarkerWs {
     wsauth: WsAuth,
 }
