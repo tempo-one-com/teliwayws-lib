@@ -1,0 +1,29 @@
+###
+POST http://recettetw.teliway.com/appli/vgtra.preprod/ws/entrant/GestionSAV/gestionSAV.php
+Content-Type: application/soap+xml
+
+<SOAP:Envelope
+    xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/"
+    >
+    			<SOAP:Header>
+        		<AuthentificationHeader>        
+        			<sLogin>gtraws</sLogin>
+        			<sPassword>mac#Pr0v1</sPassword>        
+        		</AuthentificationHeader>        
+        	</SOAP:Header>
+    <SOAP:Body>
+		<creerModifierReclamation>
+			<infosCreationModificationReclamation>
+				<idPosition>11968785</idPosition>
+				<iNumero>007</iNumero>
+				<sTypeReclamation>Avarie</sTypeReclamation>
+				<iOrigine>1</iOrigine>
+				<iStatut>0</iStatut>
+				<sNomContact>TEST</sNomContact>
+				<sMotifCreation>TEST création réclamation</sMotifCreation>
+				<sLoginOuverture>extranet</sLoginOuverture>
+			</infosCreationModificationReclamation>
+		</creerModifierReclamation>
+    </SOAP:Body>
+</SOAP:Envelope>
+

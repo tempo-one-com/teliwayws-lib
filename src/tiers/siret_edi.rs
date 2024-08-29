@@ -1,15 +1,10 @@
-use maud::{Markup, html};
-
 use crate::{auth::WsAuth, error::Result, soap_ws::WebServiceTeliwaySoap};
 
-use super::TiersWsResponse;
-
-#[derive(Debug, Clone)]
-pub struct TiersUpdateSiretWsRequest {
-   pub tiers_id: i32,
-   pub tiers_type: String,
-   pub siret: Option<String>,
-}
+use super::{
+    request::TiersUpdateSiretWsRequest,
+    response::TiersWsResponse,
+    soap::{request::TiersUpdateSiretSoapRequest, response::TiersSoapResponse},
+};
 
 #[derive(Debug, Clone)]
 pub struct TiersUpdateSiretWs {
@@ -23,38 +18,20 @@ impl TiersUpdateSiretWs {
         }
     }
 
-    pub async fn send(
-        &self,   
-        tiers: TiersUpdateSiretWsRequest,
-    ) -> Result<TiersWsResponse> {      
-       let body = tiers.build_body();    
-       let tiers = self.send_request(body.into()).await?;
-    
-       let tiers: TiersWsResponse = tiers.try_into()?;
-       
-       Ok(tiers)
-    }    
+    pub async fn send(&self, req: TiersUpdateSiretWsRequest) -> Result<TiersWsResponse> {
+        let body = TiersUpdateSiretSoapRequest::from_request(&req);
+
+        let response = self.send_request(body.into()).await?;
+        let response = TiersSoapResponse::try_from(response)?;
+        let response = TiersWsResponse::from(response);
+
+        Ok(response)
+    }
 }
 
 impl WebServiceTeliwaySoap for TiersUpdateSiretWs {
     fn get_auth(&self) -> WsAuth {
         self.wsauth.clone()
-    }
-}
-
-impl TiersUpdateSiretWsRequest {
-    fn build_body(&self) -> Markup {
-    let siret = self.siret.clone().unwrap_or_default();
-
-    html!(
-        creerModifierTiers {
-            infosCreationModificationTiers {
-                idTiers { (self.tiers_id) }
-                iTypeTiers { (self.tiers_type) }
-                sSiret { (siret) }
-            }
-        }
-    )
     }
 }
 
@@ -74,10 +51,10 @@ mod tests {
         let req = TiersUpdateSiretWsRequest {
             tiers_id: 42,
             tiers_type: "1".to_string(),
-            siret: Some("123".to_string())
+            siret: Some("123".to_string()),
         };
 
-        let enveloppe = ws.build_envelope(req.build_body().into());
+        let enveloppe = ws.build_envelope(TiersUpdateSiretSoapRequest::from_request(&req).into());
 
         assert!(enveloppe.contains("<sLogin>testusr</sLogin>"));
         assert!(enveloppe.contains("<creerModifierTiers><infosCreationModificationTiers><idTiers>42</idTiers><iTypeTiers>1</iTypeTiers><sSiret>123</sSiret></infosCreationModificationTiers></creerModifierTiers>"));
