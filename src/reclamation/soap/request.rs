@@ -15,7 +15,7 @@ impl ReclamationCreateSoapRequest {
                     iStatut {"0"}
                     sNomContact {(req.author)}
                     sMotifCreation {(req.motif)}
-                    sLoginOuverture {"extranet"}
+                    sLoginOuverture {(req.author)}
                 }
             }
         )

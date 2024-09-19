@@ -4,7 +4,7 @@ Les requêtes/réponses sont sous forme de struct
 
 # Structures
 ## Gestion tiers
-- Modification du siret edi du tiers  
+- Modification du siret edi du tiers
 
 Requête
 ```
@@ -28,7 +28,7 @@ pub struct TiersWsResponse {
 ```
 
 ## Gestion position
-- Marquage position avec évènement simple (pas les POD qui nécessite un fichier)  
+- Marquage position avec évènement simple (pas les POD qui nécessite un fichier)
 
 Requête
 ```
@@ -52,8 +52,14 @@ pub struct PositionEvent {
     pub event_id: i32,
 }
 ```
-  
+
 # Versions
+## 0.3.1 19/09/24
+ReclamationCreateSoapRequest : remplacement de "extranet" pour sLogin par req.author
+
+## 0.3 29/08/24
+NEW: ajout création réclamation
+
 ## 0.1.4 28/02/24
 NEW: Refactorisation pour simplifier code des programmes appelant cette librairie. Tous les web service (PositionEventMarkerWs, TiersUpdateSiretWs) doivent maintenant hériter de WebServiceTeliwaySoap
 
@@ -66,4 +72,4 @@ Downgrade version regex (1.10.2 -> 1.0.0) pour éviter conflit avec axum 0.7.2
 ## 0.1.1 19/01/24
 Implémentation des appels suivants:
 - GestionTiers : update du siret (edi) du tiers
-- GestionPosition : marque des positions avec un évènement 
+- GestionPosition : marque des positions avec un évènement
