@@ -7,7 +7,7 @@ pub struct PositionEventMarkerSoapRequest;
 
 impl PositionEventMarkerSoapRequest {
     pub fn from_request(req: &PositionEventMarkerWsRequest) -> Markup {
-        let date = format_to_teliway_ws_datetimez(req.date);
+        let date = format_to_teliway_ws_datetimez(req.datetime);
 
         html!(
             pointerPosition {

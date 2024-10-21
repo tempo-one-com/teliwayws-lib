@@ -55,7 +55,7 @@ mod tests {
         let req = PositionEventMarkerWsRequest {
             position_ids: vec![10, 100, 1000],
             event_code: "MLVCFM".to_string(),
-            date: DateTime::default(),
+            datetime: DateTime::default(),
             created_by: "test".to_string(),
             agence_code: "13M".to_string(),
         };
