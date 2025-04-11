@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.5.0 11/04/25
+Prise en compte d'une erreur (évnènement non existant) sur PointerPosition
+
 ## 0.3.1 19/09/24
 ReclamationCreateSoapRequest : remplacement de "extranet" pour sLogin par req.author
 

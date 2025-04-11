@@ -45,7 +45,7 @@ pub struct PositionTag {
     pub label: String,
 
     #[serde(rename = "oObjetCible")]
-    pub event: EventTag,
+    pub event: Option<EventTag>,
 }
 
 impl PositionTag {
@@ -55,6 +55,7 @@ impl PositionTag {
             .label
             .find('.')
             .ok_or(Error::MissingParam(".".to_string()))?;
+
         let du = self
             .label
             .find("du")
@@ -78,7 +79,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn response_parsing() {
+    fn response_parsing_ok() {
         let text = r#"<return xsi:type="ns1:PointagePositionReponse">
         <tabResultatsPointagePosition SOAP-ENC:arrayType="ns1:RetourReponse[1]" xsi:type="ns1:ArrayOfResultatsPointagePosition">
           <item xsi:type="ns1:RetourReponse">
@@ -99,6 +100,26 @@ mod tests {
         let item = s.root_list.items.first().unwrap();
 
         assert_eq!(item.get_recepisse().unwrap(), "87147".to_owned());
-        assert_eq!(item.event.id, 108933929);
+        assert!(item.event.is_some());
+        assert_eq!(item.event.clone().unwrap().id, 108933929);
+    }
+
+    #[test]
+    fn response_parsing_nok() {
+        let text = r#"<return xsi:type="ns1:PointagePositionReponse">
+                <tabResultatsPointagePosition SOAP-ENC:arrayType="ns1:RetourReponse[1]" xsi:type="ns1:ArrayOfResultatsPointagePosition">
+                  <item xsi:type="ns1:RetourReponse">
+                    <sCode xsi:type="xsd:string">200</sCode>
+                    <sLibelle xsi:type="xsd:string">Erreur chargement code type événement RELPOD</sLibelle>
+                  </item>
+                </tabResultatsPointagePosition>
+              </return>"#;
+
+        let part = extract_xml_tag("return", text);
+        let s: core::result::Result<PositionEventRoot, _> = quick_xml::de::from_str(part.unwrap());
+        let s = s.unwrap();
+        let item = s.root_list.items.first().unwrap();
+
+        assert!(item.event.is_none());
     }
 }

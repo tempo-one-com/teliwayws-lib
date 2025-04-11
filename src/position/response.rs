@@ -9,7 +9,8 @@ pub struct PositionEventMarkerWsResponse {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PositionEvent {
     pub recepisse: String,
-    pub event_id: i32,
+    pub event_id: Option<i32>,
+    pub label: String,
 }
 
 impl From<PositionEventMarkerSoapResponse> for PositionEventMarkerWsResponse {
@@ -24,7 +25,8 @@ impl From<PositionTag> for PositionEvent {
     fn from(value: PositionTag) -> Self {
         PositionEvent {
             recepisse: value.get_recepisse().unwrap_or_default(),
-            event_id: value.event.id,
+            event_id: value.event.map(|x| x.id),
+            label: value.label,
         }
     }
 }
