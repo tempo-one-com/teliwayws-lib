@@ -54,8 +54,11 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.5.2 11/04/25
+Ajout extraction libellé sur PositionEventMarkerWsResponse
+
 ## 0.5.1 11/04/25
-Ajout extraction libellé sur réponse de PointerPosition
+Ajout extraction libellé sur réponse de PositionEventMarkerSoapResponse
 
 ## 0.5.0 11/04/25
 Prise en compte d'une erreur (évnènement non existant) sur PointerPosition

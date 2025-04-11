@@ -98,6 +98,8 @@ pub struct EventTag {
 
 #[cfg(test)]
 mod tests {
+    use crate::position::response::PositionEventMarkerWsResponse;
+
     use super::*;
 
     #[test]
@@ -137,6 +139,8 @@ mod tests {
         let response = PositionEventMarkerSoapResponse {
             items: s.root_list.items.clone(),
         };
+
+        let response = PositionEventMarkerWsResponse::from(response);
 
         assert_eq!(response.get_messages_string(), "Pointage de la position  récép. 87147  du 03/01/2024  avec le code EXPCFM\nPointage de la position  récép. 87148  du 03/01/2024  avec le code EXPCFM");
     }
