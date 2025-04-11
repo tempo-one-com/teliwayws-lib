@@ -57,6 +57,9 @@ pub struct PositionEvent {
 ## 0.5.0 11/04/25
 Prise en compte d'une erreur (évnènement non existant) sur PointerPosition
 
+## 0.4.0 21/10/24
+Utilisation de NaiveDateTime sur Pointer Position
+
 ## 0.3.1 19/09/24
 ReclamationCreateSoapRequest : remplacement de "extranet" pour sLogin par req.author
 
