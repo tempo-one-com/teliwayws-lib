@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use serde::Deserialize;
 
 use crate::{
@@ -8,6 +10,26 @@ use crate::{
 #[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
 pub struct PositionEventMarkerSoapResponse {
     pub items: Vec<PositionTag>,
+}
+
+impl PositionEventMarkerSoapResponse {
+    pub fn get_messages_vec(&self) -> Vec<String> {
+        self.items.iter().map(|x| x.label.clone()).collect()
+    }
+
+    pub fn get_messages_string(&self) -> String {
+        let mut labels = self
+            .items
+            .iter()
+            .map(|x| x.label.clone())
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect::<Vec<_>>();
+
+        labels.sort();
+
+        labels.join("\n")
+    }
 }
 
 impl TryFrom<String> for PositionEventMarkerSoapResponse {
@@ -91,17 +113,32 @@ mod tests {
               <sDescription xsi:type="xsd:string"> EXPCFM 05/01/2024 à 12h09 </sDescription>
             </oObjetCible>
           </item>
+          <item xsi:type="ns1:RetourReponse">
+            <sCode xsi:nil="true"/>
+            <sLibelle xsi:type="xsd:string">Pointage de la position  récép. 87148  du 03/01/2024  avec le code EXPCFM</sLibelle>
+            <oObjetCible xsi:type="ns1:ObjetMetier">
+              <sTypeObjet xsi:type="xsd:string">CEvenement</sTypeObjet>
+              <idObjet xsi:type="xsd:int">108933930</idObjet>
+              <sDescription xsi:type="xsd:string"> EXPCFM 05/01/2024 à 12h09 </sDescription>
+            </oObjetCible>
+          </item>
         </tabResultatsPointagePosition>
       </return>"#;
 
         let part = extract_xml_tag("return", text);
         let s: core::result::Result<PositionEventRoot, _> = quick_xml::de::from_str(part.unwrap());
         let s = s.unwrap();
-        let item = s.root_list.items.first().unwrap();
+        let item = s.root_list.items.first().unwrap().clone();
 
         assert_eq!(item.get_recepisse().unwrap(), "87147".to_owned());
         assert!(item.event.is_some());
         assert_eq!(item.event.clone().unwrap().id, 108933929);
+
+        let response = PositionEventMarkerSoapResponse {
+            items: s.root_list.items.clone(),
+        };
+
+        assert_eq!(response.get_messages_string(), "Pointage de la position  récép. 87147  du 03/01/2024  avec le code EXPCFM\nPointage de la position  récép. 87148  du 03/01/2024  avec le code EXPCFM");
     }
 
     #[test]
@@ -118,8 +155,16 @@ mod tests {
         let part = extract_xml_tag("return", text);
         let s: core::result::Result<PositionEventRoot, _> = quick_xml::de::from_str(part.unwrap());
         let s = s.unwrap();
-        let item = s.root_list.items.first().unwrap();
+        let response = PositionEventMarkerSoapResponse {
+            items: s.root_list.items.clone(),
+        };
 
+        assert_eq!(
+            response.get_messages_string(),
+            "Erreur chargement code type événement RELPOD".to_string()
+        );
+
+        let item = s.root_list.items.first().unwrap();
         assert!(item.event.is_none());
     }
 }
