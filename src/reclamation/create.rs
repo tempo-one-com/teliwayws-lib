@@ -8,14 +8,18 @@ use super::{
 
 #[derive(Debug, Clone)]
 pub struct ReclamationCreationWs {
-    wsauth: WsAuth,
+    auth: WsAuth,
 }
 
 impl ReclamationCreationWs {
     pub fn new(url: &str, username: &str, password: &str) -> Self {
         Self {
-            wsauth: WsAuth::new(url, username, password),
+            auth: WsAuth::new(url, username, password),
         }
+    }
+
+    pub fn new_with_auth(auth: WsAuth) -> Self {
+        Self { auth }
     }
 
     pub async fn send(&self, req: ReclamationCreateWsRequest) -> Result<ReclamationWsResponse> {
@@ -31,6 +35,6 @@ impl ReclamationCreationWs {
 
 impl WebServiceTeliwaySoap for ReclamationCreationWs {
     fn get_auth(&self) -> WsAuth {
-        self.wsauth.clone()
+        self.auth.clone()
     }
 }

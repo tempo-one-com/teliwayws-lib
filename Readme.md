@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.6.0 13/08/25
+Ajout pour tous les web services d'un nouveau constructeur : new_with_auth qui prend en arguement WsAuth
+
 ## 0.5.2 11/04/25
 Ajout extraction libellé sur PositionEventMarkerWsResponse
 

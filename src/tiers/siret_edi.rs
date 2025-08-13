@@ -8,14 +8,18 @@ use super::{
 
 #[derive(Debug, Clone)]
 pub struct TiersUpdateSiretWs {
-    wsauth: WsAuth,
+    auth: WsAuth,
 }
 
 impl TiersUpdateSiretWs {
     pub fn new(url: &str, username: &str, password: &str) -> Self {
         Self {
-            wsauth: WsAuth::new(url, username, password),
+            auth: WsAuth::new(url, username, password),
         }
+    }
+
+    pub fn new_with_auth(auth: WsAuth) -> Self {
+        Self { auth }
     }
 
     pub async fn send(&self, req: TiersUpdateSiretWsRequest) -> Result<TiersWsResponse> {
@@ -31,7 +35,7 @@ impl TiersUpdateSiretWs {
 
 impl WebServiceTeliwaySoap for TiersUpdateSiretWs {
     fn get_auth(&self) -> WsAuth {
-        self.wsauth.clone()
+        self.auth.clone()
     }
 }
 

@@ -8,14 +8,18 @@ use super::{
 
 #[derive(Debug, Clone)]
 pub struct PositionEventMarkerWs {
-    wsauth: WsAuth,
+    auth: WsAuth,
 }
 
 impl PositionEventMarkerWs {
     pub fn new(url: &str, username: &str, password: &str) -> Self {
         Self {
-            wsauth: WsAuth::new(url, username, password),
+            auth: WsAuth::new(url, username, password),
         }
+    }
+
+    pub fn new_with_auth(auth: WsAuth) -> Self {
+        Self { auth }
     }
 
     pub async fn send(
@@ -34,7 +38,7 @@ impl PositionEventMarkerWs {
 
 impl WebServiceTeliwaySoap for PositionEventMarkerWs {
     fn get_auth(&self) -> WsAuth {
-        self.wsauth.clone()
+        self.auth.clone()
     }
 }
 
@@ -63,8 +67,11 @@ mod tests {
         let envelope = ws.build_envelope(PositionEventMarkerSoapRequest::from_request(&req).into());
 
         assert!(envelope.contains("<sLogin>testusr</sLogin>"));
-        assert!(envelope
-            .contains("<dtmDateHeureEvenement>1970-01-01T01:00:00.0+0100</dtmDateHeureEvenement>"));
+        assert!(
+            envelope.contains(
+                "<dtmDateHeureEvenement>1970-01-01T01:00:00.0+0100</dtmDateHeureEvenement>"
+            )
+        );
         assert!(envelope.contains("<sCodeEvenement>MLVCFM</sCodeEvenement>"));
         assert!(envelope.contains("<pointagePositionDemande><tabIdPosition><item>10</item><item>100</item><item>1000</item></tabIdPosition>"));
     }
