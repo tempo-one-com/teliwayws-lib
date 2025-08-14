@@ -1,4 +1,8 @@
-use crate::{auth::WsAuth, error::Result, soap_ws::WebServiceTeliwaySoap};
+use crate::{
+    auth::WsAuth,
+    error::{Error, Result},
+    soap_ws::WebServiceTeliwaySoap,
+};
 
 use super::{
     request::ReclamationCreateWsRequest,
@@ -20,6 +24,16 @@ impl ReclamationCreationWs {
 
     pub fn new_with_auth(auth: WsAuth) -> Self {
         Self { auth }
+    }
+
+    ///url au format https://<user>:<password>@<host>
+    pub fn try_new_from_url_with_access(url: &str) -> Result<Self> {
+        match WsAuth::try_from(url) {
+            Ok(auth) => Ok(Self::new_with_auth(auth)),
+            _ => Err(Error::Parsing(format!(
+                "Format Url Database invalide : {url}"
+            ))),
+        }
     }
 
     pub async fn send(&self, req: ReclamationCreateWsRequest) -> Result<ReclamationWsResponse> {

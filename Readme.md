@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 07.0 14/08/25
+Ajout pour tous les web services d'un nouveau constructeur : new_from_url_with_access (pour les urls de type: https://<user>:<password>@<host>)
+
 ## 0.6.0 13/08/25
 Ajout pour tous les web services d'un nouveau constructeur : new_with_auth qui prend en arguement WsAuth
 
