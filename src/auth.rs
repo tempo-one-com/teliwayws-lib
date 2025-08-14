@@ -19,7 +19,7 @@ impl WsAuth {
     }
 }
 
-impl<'a> TryFrom<&'a str> for WsAuth {
+impl TryFrom<&str> for WsAuth {
     type Error = Error;
 
     fn try_from(ws_url: &str) -> Result<Self> {

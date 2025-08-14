@@ -14,14 +14,21 @@ pub enum Error {
     ApiResult(String),
 }
 
-impl From<serde_json::Error> for Error {
-    fn from(e: serde_json::Error) -> Self {
-        Error::Parsing(e.to_string())
+impl Display for Error {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let msg = match self {
+            Error::Parsing(msg) => msg,
+            Error::MissingParam(msg) => msg,
+            Error::ApiConnexion(msg) => msg,
+            Error::ApiResult(msg) => msg,
+        };
+
+        write!(f, "{msg}")
     }
 }
 
-impl Display for Error {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self)
+impl From<serde_json::Error> for Error {
+    fn from(e: serde_json::Error) -> Self {
+        Error::Parsing(e.to_string())
     }
 }
