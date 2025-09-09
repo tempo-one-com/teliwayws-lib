@@ -21,6 +21,9 @@ impl PositionEventMarkerSoapRequest {
                     iOrigine {"1"}
                     dtmDateHeureEvenement { (date) }
                     sCodeTiersEmetteur { (req.agence_code) }
+                    @if let Some(date) = req.date_rdv {
+                        dtmDateHeureRDV { (format_to_teliway_ws_datetimez(date)) }
+                    }
                 }
             }
         )

@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 
+use log::debug;
 use serde::Deserialize;
 
 use crate::{
@@ -38,7 +39,7 @@ impl TryFrom<String> for PositionEventMarkerSoapResponse {
     fn try_from(value: String) -> Result<Self> {
         let tag = "tabResultatsPointagePosition";
         let xml = extract_xml_tag(tag, &value).ok_or(Error::Parsing(tag.to_string()))?;
-
+        debug!("{xml}");
         let data: core::result::Result<PositionTagList, quick_xml::DeError> =
             quick_xml::de::from_str(xml);
 

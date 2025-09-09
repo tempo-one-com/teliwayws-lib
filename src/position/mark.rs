@@ -76,6 +76,7 @@ mod tests {
             datetime: DateTime::default(),
             created_by: "test".to_string(),
             agence_code: "13M".to_string(),
+            date_rdv: None,
         };
 
         let envelope = ws.build_envelope(PositionEventMarkerSoapRequest::from_request(&req).into());
@@ -89,4 +90,39 @@ mod tests {
         assert!(envelope.contains("<sCodeEvenement>MLVCFM</sCodeEvenement>"));
         assert!(envelope.contains("<pointagePositionDemande><tabIdPosition><item>10</item><item>100</item><item>1000</item></tabIdPosition>"));
     }
+
+    #[test]
+    fn build_envelope_rdv() {
+        let ws = PositionEventMarkerWs::new(
+            "http://gtra.teliway.com/GestionTiers/gestionTiers.php",
+            "testusr",
+            "testpwd",
+        );
+
+        let req = PositionEventMarkerWsRequest {
+            position_ids: vec![10, 100, 1000],
+            event_code: "MLVCFM".to_string(),
+            datetime: DateTime::default(),
+            created_by: "test".to_string(),
+            agence_code: "13M".to_string(),
+            date_rdv: Some(DateTime::default()),
+        };
+
+        let envelope = ws.build_envelope(PositionEventMarkerSoapRequest::from_request(&req).into());
+
+        assert!(envelope.contains("<sLogin>testusr</sLogin>"));
+        assert!(
+            envelope.contains(
+                "<dtmDateHeureEvenement>1970-01-01T01:00:00.0+0100</dtmDateHeureEvenement>"
+            )
+        );
+        assert!(
+            envelope.contains(
+                "<dtmDateHeureRDV>1970-01-01T01:00:00.0+0100</dtmDateHeureRDV>"
+            )
+        );
+        assert!(envelope.contains("<sCodeEvenement>MLVCFM</sCodeEvenement>"));
+        assert!(envelope.contains("<pointagePositionDemande><tabIdPosition><item>10</item><item>100</item><item>1000</item></tabIdPosition>"));
+    }
+
 }

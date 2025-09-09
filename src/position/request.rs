@@ -7,4 +7,5 @@ pub struct PositionEventMarkerWsRequest {
     pub datetime: DateTime<Local>,
     pub created_by: String,
     pub agence_code: String,
+    pub date_rdv: Option<DateTime<Local>>,
 }

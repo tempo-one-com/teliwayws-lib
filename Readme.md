@@ -54,7 +54,10 @@ pub struct PositionEvent {
 ```
 
 # Versions
-## 07.0 14/08/25
+## 0.8.0 09/09/25
+Ajout dtmDateHeureRDV dans PositionEventMarkerWsRequest
+
+## 0.7.0 14/08/25
 Ajout pour tous les web services d'un nouveau constructeur : new_from_url_with_access (pour les urls de type: https://<user>:<password>@<host>)
 
 ## 0.6.0 13/08/25

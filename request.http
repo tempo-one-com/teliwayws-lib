@@ -54,3 +54,30 @@ Content-Type: application/soap+xml
     </SOAP:Body>
 </SOAP:Envelope>
 
+
+###
+POST http://gtra.teliway.com/appli/vgtra/ws/entrant/GestionPosition/gestionPosition.php
+Content-Type: application/soap+xml
+
+<SOAP:Envelope
+    xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/"
+    >
+    			<SOAP:Header>
+        		<AuthentificationHeader>        
+        			<sLogin>gtraws</sLogin>
+        			<sPassword>mac#Pr0v1</sPassword>        
+        		</AuthentificationHeader>        
+        	</SOAP:Header>
+    <SOAP:Body>
+		<pointerPosition>
+			<pointagePositionDemande>
+				<tabIdPosition><item>11843232</item></tabIdPosition>
+                <sCodeEvenement>LIVREA</sCodeEvenement>
+				<iOrigine>1</iOrigine>
+                <dtmDateHeureEvenement>2025-08-14T11:00:00</dtmDateHeureEvenement>
+                <dtmDateHeureRDV>2025-09-15T11:00:00</dtmDateHeureRDV>
+                <sCodeTiersEmetteur>95S</sCodeTiersEmetteur>
+			</pointagePositionDemande>
+		</pointerPosition>
+    </SOAP:Body>
+</SOAP:Envelope>
