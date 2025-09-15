@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.10.0 15/09/25
+Ajout info_palette_rendues
+
 ## 0.8.0 09/09/25
 Ajout dtmDateHeureRDV dans PositionEventMarkerWsRequest
 

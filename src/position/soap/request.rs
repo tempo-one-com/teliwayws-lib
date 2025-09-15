@@ -1,7 +1,7 @@
 use crate::{
     position::request::PositionEventMarkerWsRequest, utils::date::format_to_teliway_ws_datetimez,
 };
-use maud::{html, Markup};
+use maud::{Markup, html};
 
 pub struct PositionEventMarkerSoapRequest;
 
@@ -23,6 +23,9 @@ impl PositionEventMarkerSoapRequest {
                     sCodeTiersEmetteur { (req.agence_code) }
                     @if let Some(date) = req.date_rdv {
                         dtmDateHeureRDV { (format_to_teliway_ws_datetimez(date)) }
+                    }
+                    @if let Some(info) = req.info_palette_rendu.as_deref() {
+                        sInfoPalettesRendues { (info) }
                     }
                 }
             }

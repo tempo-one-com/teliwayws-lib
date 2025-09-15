@@ -77,6 +77,7 @@ mod tests {
             created_by: "test".to_string(),
             agence_code: "13M".to_string(),
             date_rdv: None,
+            info_palette_rendu: None,
         };
 
         let envelope = ws.build_envelope(PositionEventMarkerSoapRequest::from_request(&req).into());
@@ -106,6 +107,7 @@ mod tests {
             created_by: "test".to_string(),
             agence_code: "13M".to_string(),
             date_rdv: Some(DateTime::default()),
+            info_palette_rendu: None,
         };
 
         let envelope = ws.build_envelope(PositionEventMarkerSoapRequest::from_request(&req).into());
@@ -116,13 +118,8 @@ mod tests {
                 "<dtmDateHeureEvenement>1970-01-01T01:00:00.0+0100</dtmDateHeureEvenement>"
             )
         );
-        assert!(
-            envelope.contains(
-                "<dtmDateHeureRDV>1970-01-01T01:00:00.0+0100</dtmDateHeureRDV>"
-            )
-        );
+        assert!(envelope.contains("<dtmDateHeureRDV>1970-01-01T01:00:00.0+0100</dtmDateHeureRDV>"));
         assert!(envelope.contains("<sCodeEvenement>MLVCFM</sCodeEvenement>"));
         assert!(envelope.contains("<pointagePositionDemande><tabIdPosition><item>10</item><item>100</item><item>1000</item></tabIdPosition>"));
     }
-
 }
