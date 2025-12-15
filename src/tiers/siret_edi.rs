@@ -59,7 +59,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn build_envelope() {
+    fn build_envelope_update_siret() {
         let ws = TiersUpdateSiretWs::new(
             "http://gtra.teliway.com/GestionTiers/gestionTiers.php",
             "testusr",

@@ -1,6 +1,7 @@
-use maud::{html, Markup};
+use maud::{Markup, html};
 
-use crate::tiers::request::TiersUpdateSiretWsRequest;
+use crate::tiers::request::{TiersCreateOrUpdateWsRequest, TiersType, TiersUpdateSiretWsRequest};
+use crate::utils;
 
 pub struct TiersUpdateSiretSoapRequest;
 
@@ -14,6 +15,75 @@ impl TiersUpdateSiretSoapRequest {
                     idTiers { (req.tiers_id) }
                     iTypeTiers { (req.tiers_type) }
                     sSiret { (siret) }
+                }
+            }
+        )
+    }
+}
+
+pub struct TiersCreateOrUpdateSoapRequest;
+
+impl TiersCreateOrUpdateSoapRequest {
+    pub fn from_request(tiers: &TiersCreateOrUpdateWsRequest) -> Markup {
+        let type_value = match tiers.tiers_type {
+            TiersType::Client => 1,
+            TiersType::Transporter => 5,
+            TiersType::Agency => 4,
+        };
+
+        let date = utils::date::format_to_teliway_ws_date(tiers.date);
+
+        html!(
+            creerModifierTiers {
+                infosCreationModificationTiers {
+                    @if let Some(id) = tiers.tiers_id {
+                        idTiers {(id)}
+                    }
+                    iTypeTiers {(type_value)}
+                    sCode {(tiers.code)}
+                    sNom {(tiers.name)}
+                    sCodeGroupe {(tiers.group_code)}
+                    sCodePays {(tiers.country_code)}
+                    sAdresse1 {(tiers.address1)}
+                    sAdresse2 {(tiers.address2)}
+                    sAdresse3 {(tiers.address3)}
+                    sCodePostal {(tiers.zipcode)}
+                    sVille {(tiers.town)}
+                    bActif {(utils::xml::format_bool_to_int(tiers.is_active))}
+                    bSensible {(tiers.is_risky)}
+                    iSousType {(tiers.sub_type)}
+                    @match tiers.tiers_id {
+                        Some(_) => dDateModification {(date)}
+                        None => dDateCreation {(date)}
+                    }
+                    sNomPourDocument {};
+                    sSiretAdministratif {(tiers.siret_administrative.clone().unwrap_or_default())}
+                    sCodeNAF {(tiers.code_naf.clone().unwrap_or_default())}
+                    sNumeroTVA {(tiers.vat_number)}
+                    sNatureTVA {(tiers.vat_nature)}
+                    sComptableAuxiliaire {(tiers.auxilary_account)}
+                    @if tiers.tiers_type == TiersType::Transporter {
+                        sCompteComptableAuxiliaireFournisseur {(tiers.supplier_auxiliary_account)}
+                    }
+                    sTelephone {(tiers.phone)}
+                    sFax {(tiers.fax)}
+                    sEmail {(tiers.email)}
+                    sEmailFacture {(tiers.email_invoice)}
+                    iFlagInfos {(0)}
+                    bSuiviEmballage {(utils::xml::format_bool_to_int(tiers.packaging_tracking))}
+                    bEmballageGestionNonRendu {(utils::xml::format_bool_to_int(tiers.packing_loss_management))}
+                    fEmballageTauxFreinte {(tiers.packaging_loss_rate.unwrap_or(0.0))}
+                    sCommentaire {(tiers.note)}
+                    idAgenceCommerciale {(tiers.sales_agency_id.unwrap_or(0))}
+                    idContactSuiviComm {(tiers.sales_contact)}
+                    idContactSuiviClient {(0)}
+                    sCodeTracking {};
+                    iNiveauSuivi {(1)}
+                    iEtatConfiance {(tiers.trust_level)}
+                    @match tiers.tiers_id {
+                        Some(_) => sNomUtilisateurModif {"AppTiers"}
+                        None => sNomUtilisateurCreateur {"AppTiers"}
+                    }
                 }
             }
         )

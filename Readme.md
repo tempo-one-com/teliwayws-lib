@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.11.0 15/12/25
+Ajout TiersCreationModification
+
 ## 0.10.0 15/09/25
 Ajout info_palette_rendues
 
