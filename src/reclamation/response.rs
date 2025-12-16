@@ -1,5 +1,6 @@
 use super::soap::response::ReclamationSoapResponse;
 
+#[derive(Debug, Clone)]
 pub struct ReclamationWsResponse {
     pub id: i32,
 }

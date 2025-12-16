@@ -11,6 +11,7 @@ pub struct PositionEvent {
     pub label: String,
 }
 
+#[derive(Debug, Clone)]
 pub struct PositionEventMarkerWsResponse {
     pub items: Vec<PositionEvent>,
 }

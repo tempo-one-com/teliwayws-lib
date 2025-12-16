@@ -1,5 +1,6 @@
 use super::soap::response::TiersSoapResponse;
 
+#[derive(Debug, Clone)]
 pub struct TiersWsResponse {
     pub tiers_id: i32,
     pub code: String,
