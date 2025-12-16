@@ -76,8 +76,8 @@ mod tests {
             name: "Hankook".to_string(),
             country_code: "FR".to_string(),
             address1: "5 allée du matin calme".to_string(),
-            is_active: true,
-            date: NaiveDate::from_ymd_opt(2025, 12, 15).unwrap_or_default(),
+            is_active: Some(true),
+            date: Some(NaiveDate::from_ymd_opt(2025, 12, 15).unwrap_or_default()),
             vat_number: "FRVAT_123456".to_string(),
             ..Default::default()
         };

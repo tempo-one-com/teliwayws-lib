@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.13.0 16/12/25
+Valeur par défaut pour TiersCreateOrUpdateWsRequest pour éviter de devoir tout remplir au niveau du client
+
 ## 0.12.0 16/12/25
 Ajout des valeurs teliway pour TiersType
 
