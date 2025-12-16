@@ -1,4 +1,4 @@
-use chrono::NaiveDate;
+use chrono::{Local, NaiveDate};
 use maud::{Markup, html};
 
 use crate::tiers::request::{TiersCreateOrUpdateWsRequest, TiersType, TiersUpdateSiretWsRequest};
@@ -29,7 +29,7 @@ impl TiersCreateOrUpdateSoapRequest {
         let date = tiers
             .date
             .map(format_to_teliway_ws_date)
-            .unwrap_or(format_to_teliway_ws_date(NaiveDate::default()));
+            .unwrap_or(format_to_teliway_ws_date(Local::now().date_naive()));
 
         html!(
             creerModifierTiers {
