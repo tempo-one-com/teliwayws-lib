@@ -1,8 +1,12 @@
-use chrono::{Local, NaiveDate};
+use chrono::Local;
 use maud::{Markup, html};
 
-use crate::tiers::request::{TiersCreateOrUpdateWsRequest, TiersType, TiersUpdateSiretWsRequest};
-use crate::utils::{date::format_to_teliway_ws_date, xml::format_bool_to_int};
+use crate::tiers::{
+    TiersType,
+    request::{TiersCreateOrUpdateWsRequest, TiersUpdateSiretWsRequest},
+};
+use crate::utils::date::format_to_teliway_ws_date;
+use crate::utils::xml::format_bool_to_int;
 
 pub struct TiersUpdateSiretSoapRequest;
 
@@ -100,8 +104,12 @@ impl TiersCreateOrUpdateSoapRequest {
                         idContactSuiviComm {(x)}
                     }
                     idAgenceCommerciale {(tiers.sales_agency_id.unwrap_or(0))}
-                    idContactSuiviClient {(0)}
-                    sCodeTracking {};
+                    @if let Some(x) = tiers.client_contact {
+                        idContactSuiviClient {(x)}
+                    }
+                    @if let Some(x) = tiers.tracking_code {
+                        sCodeTracking {(x)};
+                    }
                     iNiveauSuivi {(1)}
                     @if let Some(x) = tiers.trust_level {
                         iEtatConfiance {(x)}
