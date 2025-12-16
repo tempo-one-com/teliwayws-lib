@@ -25,12 +25,6 @@ pub struct TiersCreateOrUpdateSoapRequest;
 
 impl TiersCreateOrUpdateSoapRequest {
     pub fn from_request(tiers: &TiersCreateOrUpdateWsRequest) -> Markup {
-        let type_value = match tiers.tiers_type {
-            TiersType::Client => 1,
-            TiersType::Transporter => 5,
-            TiersType::Agency => 4,
-        };
-
         let date = utils::date::format_to_teliway_ws_date(tiers.date);
 
         html!(
@@ -39,7 +33,7 @@ impl TiersCreateOrUpdateSoapRequest {
                     @if let Some(id) = tiers.tiers_id {
                         idTiers {(id)}
                     }
-                    iTypeTiers {(type_value)}
+                    iTypeTiers {(tiers.tiers_type.clone() as u8)}
                     sCode {(tiers.code)}
                     sNom {(tiers.name)}
                     sCodeGroupe {(tiers.group_code)}
@@ -60,9 +54,9 @@ impl TiersCreateOrUpdateSoapRequest {
                     sSiretAdministratif {(tiers.siret_administrative.clone().unwrap_or_default())}
                     sCodeNAF {(tiers.code_naf.clone().unwrap_or_default())}
                     sNumeroTVA {(tiers.vat_number)}
-                    sNatureTVA {(tiers.vat_nature)}
+                    iNatureTVA {(tiers.vat_nature)}
                     sComptableAuxiliaire {(tiers.auxilary_account)}
-                    @if tiers.tiers_type == TiersType::Transporter {
+                    @if tiers.tiers_type == TiersType::Carrier {
                         sCompteComptableAuxiliaireFournisseur {(tiers.supplier_auxiliary_account)}
                     }
                     sTelephone {(tiers.phone)}

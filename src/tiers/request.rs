@@ -1,11 +1,25 @@
 use chrono::NaiveDate;
 
 #[derive(Debug, Clone, Default, PartialEq)]
+#[repr(u8)]
 pub enum TiersType {
     #[default]
-    Client,
-    Transporter,
-    Agency,
+    Client = 1,
+    Carrier = 5,
+    Agency = 4,
+}
+
+impl TryFrom<u8> for TiersType {
+    type Error = String; // Ou un type d'erreur plus descriptif, ex. String
+
+    fn try_from(value: u8) -> Result<Self, Self::Error> {
+        match value {
+            1 => Ok(TiersType::Client),
+            5 => Ok(TiersType::Carrier),
+            4 => Ok(TiersType::Agency),
+            _ => Err(format!("TiersType valeur {value} inconnue")),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -36,7 +50,7 @@ pub struct TiersCreateOrUpdateWsRequest {
     pub siret_administrative: Option<String>,
     pub code_naf: Option<String>,
     pub vat_number: String,
-    pub vat_nature: String,
+    pub vat_nature: i32,
     pub auxilary_account: String,
     pub supplier_auxiliary_account: String,
     pub phone: String,

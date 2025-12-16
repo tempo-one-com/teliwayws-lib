@@ -54,6 +54,9 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.12.0 16/12/25
+Ajout des valeurs teliway pour TiersType
+
 ## 0.11.0 15/12/25
 Ajout TiersCreationModification
 
