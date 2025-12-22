@@ -27,6 +27,9 @@ impl PositionEventMarkerSoapRequest {
                     @if let Some(info) = req.info_palette_rendu.as_deref() {
                         sInfoPalettesRendues { (info) }
                     }
+                    @if let Some(remarque) = req.comment.as_deref() {
+                        sRemarques {(remarque)}
+                    }
                 }
             }
         )

@@ -76,8 +76,7 @@ mod tests {
             datetime: DateTime::default(),
             created_by: "test".to_string(),
             agence_code: "13M".to_string(),
-            date_rdv: None,
-            info_palette_rendu: None,
+            ..Default::default()
         };
 
         let envelope = ws.build_envelope(PositionEventMarkerSoapRequest::from_request(&req).into());
@@ -107,7 +106,7 @@ mod tests {
             created_by: "test".to_string(),
             agence_code: "13M".to_string(),
             date_rdv: Some(DateTime::default()),
-            info_palette_rendu: None,
+            ..Default::default()
         };
 
         let envelope = ws.build_envelope(PositionEventMarkerSoapRequest::from_request(&req).into());

@@ -9,4 +9,5 @@ pub struct PositionEventMarkerWsRequest {
     pub agence_code: String,
     pub date_rdv: Option<DateTime<Local>>,
     pub info_palette_rendu: Option<String>,
+    pub comment: Option<String>,
 }
