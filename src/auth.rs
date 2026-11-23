@@ -1,8 +1,10 @@
+use std::fmt;
+
 use regex::Regex;
 
 use crate::error::{Error, Result};
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct WsAuth {
     pub url: String,
     pub username: String,
@@ -16,6 +18,17 @@ impl WsAuth {
             username: username.to_owned(),
             password: password.to_owned(),
         }
+    }
+}
+
+/// Mot de passe masqué : un `{:?}` ne doit pas l'afficher dans les logs
+impl fmt::Debug for WsAuth {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("WsAuth")
+            .field("url", &self.url)
+            .field("username", &self.username)
+            .field("password", &"***")
+            .finish()
     }
 }
 
@@ -48,7 +61,10 @@ impl TryFrom<&str> for WsAuth {
                 password,
             })
         } else {
-            Err(Error::Parsing(format!("url invalide: {ws_url}")))
+            // l'url porte les identifiants : elle n'est pas reprise dans le message
+            Err(Error::Parsing(
+                "url invalide, format attendu : https://<user>:<password>@<host>".to_owned(),
+            ))
         }
     }
 }
@@ -68,5 +84,13 @@ mod tests {
         );
         assert_eq!(ws.clone().unwrap().username, "username");
         assert_eq!(ws.clone().unwrap().password, "password");
+    }
+
+    #[test]
+    fn debug_masks_password() {
+        let ws = WsAuth::new("http://domaine.com", "username", "secret");
+        let text = format!("{ws:?}");
+        assert!(text.contains("username"));
+        assert!(!text.contains("secret"));
     }
 }
