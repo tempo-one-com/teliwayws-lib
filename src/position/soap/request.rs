@@ -1,7 +1,9 @@
+use base64::{Engine, engine::general_purpose::STANDARD};
+use maud::{Markup, html};
+
 use crate::{
     position::request::PositionEventMarkerWsRequest, utils::date::format_to_teliway_ws_datetimez,
 };
-use maud::{Markup, html};
 
 pub struct PositionEventMarkerSoapRequest;
 
@@ -29,6 +31,16 @@ impl PositionEventMarkerSoapRequest {
                     }
                     @if let Some(remarque) = req.comment.as_deref() {
                         sRemarques {(remarque)}
+                    }
+                    @if !req.files.is_empty() {
+                        tabOFichier {
+                        @for file in &req.files {
+                            item {
+                                sNom { (file.name) }
+                                sType { (file.mime_type) }
+                                sData { (STANDARD.encode(&file.content)) }
+                            }
+                        }}
                     }
                 }
             }

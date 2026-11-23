@@ -10,4 +10,17 @@ pub struct PositionEventMarkerWsRequest {
     pub date_rdv: Option<DateTime<Local>>,
     pub info_palette_rendu: Option<String>,
     pub comment: Option<String>,
+    /// Pièces jointes de l'événement (POD…), envoyées dans `tabOFichier`
+    pub files: Vec<EventFile>,
+}
+
+/// Fichier joint à un événement
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct EventFile {
+    /// Nom du fichier, avec son extension (`pod.pdf`)
+    pub name: String,
+    /// Type MIME (`application/pdf`, `image/jpeg`…)
+    pub mime_type: String,
+    /// Contenu brut, encodé en base64 à l'envoi
+    pub content: Vec<u8>,
 }

@@ -1,10 +1,11 @@
 [package]
 name = "teliwayws-lib"
-version = "0.10.0"
+version = "0.18.0"
 edition = "2024"
 
 [dependencies]
 async-trait = "^0.1.89"
+base64 = "^0.22.1"
 chrono = { version = "^0.4.42", features = ["serde"] }
 log = "^0.4.29"
 maud = "^0.27.0"

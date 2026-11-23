@@ -143,7 +143,10 @@ mod tests {
 
         let response = PositionEventMarkerWsResponse::from(response);
 
-        assert_eq!(response.get_messages_string(), "Pointage de la position  récép. 87147  du 03/01/2024  avec le code EXPCFM\nPointage de la position  récép. 87148  du 03/01/2024  avec le code EXPCFM");
+        assert_eq!(
+            response.get_messages_string(),
+            "Pointage de la position  récép. 87147  du 03/01/2024  avec le code EXPCFM\nPointage de la position  récép. 87148  du 03/01/2024  avec le code EXPCFM"
+        );
     }
 
     #[test]

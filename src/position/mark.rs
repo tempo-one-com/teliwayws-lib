@@ -61,6 +61,7 @@ mod tests {
     use chrono::DateTime;
 
     use super::*;
+    use crate::position::request::EventFile;
 
     #[test]
     fn build_envelope() {
@@ -120,5 +121,39 @@ mod tests {
         assert!(envelope.contains("<dtmDateHeureRDV>1970-01-01T01:00:00.0+0100</dtmDateHeureRDV>"));
         assert!(envelope.contains("<sCodeEvenement>MLVCFM</sCodeEvenement>"));
         assert!(envelope.contains("<pointagePositionDemande><tabIdPosition><item>10</item><item>100</item><item>1000</item></tabIdPosition>"));
+    }
+
+    #[test]
+    fn build_envelope_files() {
+        let req = PositionEventMarkerWsRequest {
+            position_ids: vec![10],
+            event_code: "PODCFM".to_string(),
+            files: vec![
+                EventFile {
+                    name: "pod-1.pdf".to_string(),
+                    mime_type: "application/pdf".to_string(),
+                    content: b"%PDF".to_vec(),
+                },
+                EventFile {
+                    name: "pod-2.jpg".to_string(),
+                    mime_type: "image/jpeg".to_string(),
+                    content: vec![0xFF, 0xD8],
+                },
+            ],
+            ..Default::default()
+        };
+
+        let body = PositionEventMarkerSoapRequest::from_request(&req).into_string();
+
+        assert!(body.contains(
+            "<tabOFichier><item><sNom>pod-1.pdf</sNom><sType>application/pdf</sType><sData>JVBERg==</sData></item><item><sNom>pod-2.jpg</sNom><sType>image/jpeg</sType><sData>/9g=</sData></item></tabOFichier>"
+        ));
+    }
+
+    #[test]
+    fn build_envelope_without_files() {
+        let body = PositionEventMarkerSoapRequest::from_request(&Default::default()).into_string();
+
+        assert!(!body.contains("tabOFichier"));
     }
 }

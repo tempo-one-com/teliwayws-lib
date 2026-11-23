@@ -1,5 +1,5 @@
 use crate::reclamation::request::ReclamationCreateWsRequest;
-use maud::{html, Markup};
+use maud::{Markup, html};
 
 pub struct ReclamationCreateSoapRequest;
 

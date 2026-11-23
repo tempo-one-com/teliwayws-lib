@@ -28,7 +28,7 @@ pub struct TiersWsResponse {
 ```
 
 ## Gestion position
-- Marquage position avec évènement simple (pas les POD qui nécessite un fichier)
+- Marquage position avec évènement, avec ou sans fichiers joints (POD…)
 
 Requête
 ```
@@ -38,6 +38,13 @@ pub struct PositionEventMarkerWsRequest {
     pub date: DateTime<Local>,
     pub created_by: String,
     pub agence_code: String,
+    pub files: Vec<EventFile>, // envoyés dans tabOFichier, vide = aucun fichier
+}
+
+pub struct EventFile {
+    pub name: String,      // sNom
+    pub mime_type: String, // sType
+    pub content: Vec<u8>,  // sData, encodé en base64
 }
 ```
 
@@ -54,6 +61,10 @@ pub struct PositionEvent {
 ```
 
 # Versions
+## 0.18.0
+Ajout des fichiers joints (`tabOFichier`) au pointage de position
+Timeout de 120 s sur les appels au web service
+
 ## 0.17.0 22/12/25
 Ajout sRemarques dans position
 
