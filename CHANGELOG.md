@@ -1,3 +1,6 @@
+0.19.1 23/11/26
+FIX: mot de passe masqué dans les logs
+
 0.19.0 23/11/26
 NEW: ajout fichier sur évènement
 
